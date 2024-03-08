@@ -1,0 +1,92 @@
+@* @model Purchase
+@{
+    ViewData["Title"] = "Purchase";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Purchase</p>
+
+<form id="purchaseForm" method="post" action="Cart" onsubmit="return validateForm()">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <label for="txtNomeProdotto">Nome del Prodotto:</label>
+    <input type="text" name="prodotto" required />
+    <br />
+
+    <label for="txtQuantita">Quantità:</label>
+    <input type="number" name="quantita" required/>
+   
+    <br />
+
+    <input type="submit" value="Purchase" />
+</form>
+
+<script>
+    function validateForm() {
+        var quantita = document.getElementsByName("quantita")[0].value;
+
+        if (quantita <= 0) {
+            alert("Inserire una quantità valida.");
+            return false; // Impedisce l'invio del modulo
+        }
+
+        return true; //invio del modulo
+    }
+</script> *@
+@model List<Purchase>
+@{
+    ViewData["Title"] = "Purchase";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Purchase</p>
+
+<form id="purchaseForm" method="post" action="Cart" onsubmit="return validateForm()">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <label for="prodottoId">Seleziona Prodotto:</label>
+    <select name="prodottoId" id="prodottoId">
+        @foreach (var prodotto in Model)
+        {
+            <option value="@prodotto.PurchaseId" data-quantita="@prodotto.quantita" data-prezzo="@prodotto.prezzo">@prodotto.prodotto - Disponibile: @prodotto.quantita - prezzo: @prodotto.prezzo</option>
+        }
+    </select>
+
+    <br />
+
+    <label for="quantitaDesiderata">Quantità desiderata:</label>
+    <input type="number" name="quantitaDesiderata" id="quantitaDesiderata" required/>
+
+    <br />
+
+    <label for="prezzoTotale">Prezzo Totale:</label>
+    <input type="text" name="prezzoTotale" id="prezzoTotale" readonly />
+
+    <br />
+
+    <input type="submit" value="Purchase" />
+</form>
+
+<script>
+    function validateForm() {
+        var quantitaDesiderata = parseInt(document.getElementById("quantitaDesiderata").value);
+        var disponibilita = parseInt(document.getElementById("prodottoId").selectedOptions[0].dataset.quantita);
+        var prezzoUnitario = parseFloat(document.getElementById("prodottoId").selectedOptions[0].dataset.prezzo);
+
+        if (quantitaDesiderata <= 0 || quantitaDesiderata > disponibilita) {
+            alert("Inserire una quantità valida.");
+            return false; // Impedisce l'invio del modulo
+        }
+
+        var prezzoTotale = quantitaDesiderata * prezzoUnitario;
+        document.getElementById("prezzoTotale").value = prezzoTotale.toFixed(2);
+
+        return true; // Invio del modulo
+    }
+</script>
+
+

@@ -1,0 +1,56 @@
+@model Registrazione//quando c'è la @ tutta la riga è in razor ovvero c#
+@{
+    ViewData["Title"] = "SignUp";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>SignUp</p>
+
+<form method="post" action="Riepilogo">
+    <label for="txtData">Data di Nascita (DD/MM/YYYY): </label>
+    <input type="date" id="txtData" name="Data" pattern="\d{2}/\d{2}/\d{4}" placeholder="DD/MM/YYYY" required />
+    <br />
+    <label for="txtNome">Nome:</label>
+    <input type="text" id="txtNome" name="nome" required />
+    <br />
+    <label for = "txtCognome">Cognome:</label>
+    <input type = "text" id = "txtCognome" name = "cognome" required />
+    <br /> 
+    <label for="txtEmail">Email:</label>
+    <input type="email" id="txtEmail" name="email" required />
+    <br />
+    <label>Sesso:</label>
+    <label for="radioMale">Maschio</label>
+    <input type="radio" id="radioMale" name="sesso" value="M" required />
+    <label for="radioFemale">Femmina</label>
+    <input type="radio" id="radioFemale" name="sesso" value="F" required />
+    <label for="radioNonGender">Non Binario</label>
+    <input type="radio" id="radioNull" name="sesso" value="Non Binario" required />
+    <br />
+    <label for="ddlRuolo">Ruolo:</label>
+    <select id="ddlRuolo" name="ruolo" required>
+        <option value="Studente">Studente</option>
+        <option value="Docente">Docente</option>
+        <option value="Docente">Altro</option>
+    </select>
+    <br />
+    <input type="submit" value="SignUp" />
+</form>
+<script>
+    function prepareDate(event) {
+        event.preventDefault();//evitiamo che il comportamento di default del form si attivi perchè stiamo controllando il comportamento della data manualmente
+
+        var dataInput = document.getElementById('txtData').value;//andiamo a richiamare l'id dell'input type Data
+        // Validazione con espressione regolare
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataInput)) {
+            alert('Inserisci una data valida nel formato DD/MM/YYYY.');
+            return;
+        }
+
+       document.getElementById('txtData').value = new Date(dataInput);
+       event.target.submit();//invio del modulo in maniera manuale
+       
+    }
+</script>
+
